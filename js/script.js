@@ -12,7 +12,7 @@ function shuffle(array) {
 }
 
 async function initGame(catName) {
-    const res = await fetch('data.json');
+    const res = await fetch('questions.json');
     const data = await res.json();
     
     // On récupère la catégorie ET on la mélange immédiatement
