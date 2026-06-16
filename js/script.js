@@ -15,7 +15,16 @@ async function initGame(catName) {
     const res = await fetch('questions.json');
     const data = await res.json();
     
-    // On récupère la catégorie ET on la mélange immédiatement
+    // 1. Debugging: Check if data and the specific category exist
+    console.log("Loaded data:", data);
+    console.log("Attempting to access:", catName);
+
+    if (!data[catName]) {
+        console.error(`Error: Category "${catName}" not found in JSON.`);
+        return; // Stop execution to prevent the crash
+    }
+    
+    // 2. Safe assignment
     currentCat = shuffle([...data[catName]]); 
     
     currentIdx = 0;
@@ -58,3 +67,25 @@ function nextQuestion() {
     if (currentIdx < currentCat.length) renderQuestion();
     else location.reload(); // Fin de catégorie, on recharge
 }
+
+// Fonction pour charger le menu dynamiquement au démarrage
+async function loadMenu() {
+    const res = await fetch('questions.json');
+    const data = await res.json();
+    const container = document.getElementById('category-list');
+
+    Object.keys(data).forEach(cat => {
+        // Nettoyage : remplace '-' par ' ' et met une majuscule au début
+        let label = cat.replace(/-/g, ' '); 
+        label = label.charAt(0).toUpperCase() + label.slice(1);
+
+        const btn = document.createElement('button');
+        btn.innerText = label;
+        btn.className = 'cat-btn'; // Ajout d'une classe pour le style
+        btn.onclick = () => initGame(cat);
+        container.appendChild(btn);
+    });
+}
+
+// Appeler cette fonction quand la page est chargée
+window.onload = loadMenu;

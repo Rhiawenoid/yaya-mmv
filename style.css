@@ -6,6 +6,21 @@ body { background: var(--bg); color: #d4d4d4; font-family: sans-serif; }
 .option-btn.selected { border: 2px solid var(--accent); }
 input { width: 100%; padding: 10px; margin-top: 10px; background: #3c3c3c; border: 1px solid #555; color: white; }
 button { background: var(--accent); color: white; border: none; padding: 10px 20px; cursor: pointer; }
+#category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.cat-btn {
+    width: 100%;
+    max-width: 400px; /* Largeur maximale pour ne pas déborder */
+    padding: 15px;
+    text-align: left; /* Plus lisible pour les textes longs */
+    word-wrap: break-word; /* Force le retour à la ligne si le mot est trop long */
+    white-space: normal;   /* Permet le retour à la ligne */
+}
 
 /* Media Query pour mobiles */
 @media screen and (max-width: 600px) {
