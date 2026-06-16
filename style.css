@@ -6,3 +6,32 @@ body { background: var(--bg); color: #d4d4d4; font-family: sans-serif; }
 .option-btn.selected { border: 2px solid var(--accent); }
 input { width: 100%; padding: 10px; margin-top: 10px; background: #3c3c3c; border: 1px solid #555; color: white; }
 button { background: var(--accent); color: white; border: none; padding: 10px 20px; cursor: pointer; }
+
+/* Media Query pour mobiles */
+@media screen and (max-width: 600px) {
+    .container {
+        width: 95%; /* Prend presque toute la largeur */
+        margin: 10px auto;
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.5rem; /* Réduit la taille du titre */
+    }
+
+    .card {
+        padding: 1rem; /* Moins de marge interne sur mobile */
+    }
+
+    .option-btn, button {
+        font-size: 1rem;
+        padding: 15px; /* Plus grand pour faciliter le clic avec le doigt */
+        width: 100%; /* Boutons pleine largeur */
+        box-sizing: border-box;
+    }
+
+    img {
+        max-width: 100% !important; /* L'image ne dépasse jamais l'écran */
+        height: auto;
+    }
+}

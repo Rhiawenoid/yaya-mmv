@@ -2,10 +2,22 @@ let questions = [];
 let currentIdx = 0;
 let currentCat = [];
 
+// Fonction pour mélanger un tableau (Algorithme de Fisher-Yates)
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
 async function initGame(catName) {
-    const res = await fetch('questions.json');
+    const res = await fetch('data.json');
     const data = await res.json();
-    currentCat = data[catName];
+    
+    // On récupère la catégorie ET on la mélange immédiatement
+    currentCat = shuffle([...data[catName]]); 
+    
     currentIdx = 0;
     document.getElementById('menu-cat').style.display = 'none';
     document.getElementById('game-container').style.display = 'block';
