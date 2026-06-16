@@ -1,0 +1,24 @@
+{
+  "cat1": [
+    {
+      "question": "Quel est le nom de cette pièce ?",
+      "image": "images/col.jpg",
+      "reponse": ["Gaga A", "Gaga B", "Gaga C", "Gaga D"],
+      "bonneReponse": ["Gaga A"]
+    },
+    {
+      "question": "Traduisez 'Tailor'",
+      "image": null,
+      "reponse": "Tailleur",
+      "bonneReponse": null
+    }
+  ],
+  "cat2": [
+    {
+      "question": "Question de la catégorie 2",
+      "image": null,
+      "reponse": ["Option A", "Option B"],
+      "bonneReponse": ["Option B"]
+    }
+  ]
+}

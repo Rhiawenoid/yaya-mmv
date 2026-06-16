@@ -1,43 +1,25 @@
-<!doctype html>
-<html lang="fr">
+<!DOCTYPE html>
+<html lang="fr" class="dark-theme">
 <head>
-  <meta charset="utf-8">
-  <title>BTS MMV</title>
-  <link rel="stylesheet" href="style.css">
-  <script type="text/javascript" src="./js/anglais_tech.js"></script>
-  <script type="text/javascript" src="./js/script.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>BTS MMV - Apprentissage</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <ul class="menu">
-        <li><a href="anglais.html">Anglais Vocabulaire</a></li>
-        <li><a href="anglaislecon.html">Anglais Leçon</a></li>
-        <li><a href="anglaisfacultatif.html">Anglais Facultatif</a></li>
-        <li><a href="index.html">Anglais Technique</a></li>
-        <li><a href="economie.html">Economie</a></li>
-        <li><a href="chimie.html">Sciences</a></li>
-        <li><a href="maths.html">Mathématiques</a></li>
-        <li><a href="couture.html">Couture</a></li>
-        <li><a href="couture_tech.html">Couture théorique</a></li>
-        <li><a href="ajoutervoc.html">Ajouter du vocabulaire</a></li>
-    </ul> 
-
-    <br>
-    <div class="diff">
-      <input type="button" class="btnDiff" value= "Liste mots" onclick="listWords(anglais_tech)">
-      <input type="button" class="btnDiff" value= "Vocabulaires" onclick="question(anglais_tech)">
-    </div>
-
-    <div class="questions" id="qs"></div>
-
-    <div id="validation">
-      <input type="button" style="visibility: hidden; display: none;" value= "Valider" id="btnValid" onclick="validate()"></input>
-      <input type="button" style="visibility: hidden; display: none;" value= "Suivant" id="btnNext" onclick="changeSelect()"></input>
-      <div id="score"></div>
-    </div>
-
-    
-
-
+    <main class="container">
+        <h1>Apprentissage MMV</h1>
+        <div id="menu-cat">
+            <button onclick="initGame('cat1')">Catégorie 1</button>
+            <button onclick="initGame('cat2')">Catégorie 2</button>
+        </div>
+        <div class="card" id="game-container" style="display:none;">
+            <div id="content"></div>
+            <div class="controls">
+                <button id="btnValid" onclick="validate()">Valider</button>
+                <button id="btnNext" onclick="nextQuestion()" style="display:none;">Suivant</button>
+            </div>
+        </div>
+    </main>
+    <script src="js/script.js"></script>
 </body>
 </html>
