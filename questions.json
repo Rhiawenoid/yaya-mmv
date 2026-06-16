@@ -1,16 +1,64 @@
 {
-  "cat1": [
+  "la-securite-du-passager-et-du-vehicule-l’installation-sécurise-des-passagers-adultes": [
     {
-      "question": "Quel est le nom de cette pièce ?",
-      "image": "images/col.jpg",
-      "reponse": ["Gaga A", "Gaga B", "Gaga C", "Gaga D"],
-      "bonneReponse": ["Gaga A"]
+      "question": "La ceinture de sécurité est :",
+      "image": null,
+      "reponse": ["Facultative pour les passagers adultes", "Obligatoire pour tous", "Obligatoire seulement à l’avant", "Obligatoire seulement sur autoroute"],
+      "bonneReponse": ["Obligatoire pour tous"]
     },
     {
-      "question": "Traduisez 'Tailor'",
+      "question": "Sans ceinture à 25 km/h, le risque est :",
       "image": null,
-      "reponse": "Tailleur",
-      "bonneReponse": null
+      "reponse": ["Aucune conséquence", "Blessures graves", "Simple gêne", "Perte de points"],
+      "bonneReponse": ["Blessures graves"]
+    },
+    {
+      "question": "Sans ceinture à 50 km/h, le risque est :",
+      "image": null,
+      "reponse": ["Blessures légères", "Aucune conséquence", "Mort", "Douleur temporaire"],
+      "bonneReponse": ["Mort"]
+    },
+    {
+      "question": "Un adulte non attaché encourt :",
+      "image": null,
+      "reponse": ["90€", "135€", "200€", "Aucune sanction"],
+      "bonneReponse": ["135€"]
+    },
+    {
+      "question": "Le conducteur non attaché encourt :",
+      "image": null,
+      "reponse": ["135€ et -3 points", "135€", "-3 points uniquement", "90€ et -2 points"],
+      "bonneReponse": ["135€ et -3 points"]
+    },
+    {
+      "question": "Les airbags :",
+      "image": null,
+      "reponse": ["Peuvent être bloqués par des objets", "Fonctionnent mieux avec des objets devant", "Nécessitent des objets entre airbag et passager", "Aucun objet ne doit se trouver entre airbag et passager"],
+      "bonneReponse": ["Aucun objet ne doit se trouver entre airbag et passager"]
+    },
+    {
+      "question": "Les prétensionneurs servent à :",
+      "image": null,
+      "reponse": ["Desserrer la ceinture", "Bloquer la ceinture plus tôt et plus fermement pendant le choc", "Remplacer l’airbag", "Augmenter la vitesse"],
+      "bonneReponse": ["Bloquer la ceinture plus tôt et plus fermement pendant le choc"]
+    },
+    {
+      "question": "Les limiteurs d’effort :",
+      "image": null,
+      "reponse": ["Augmentent la pression de la ceinture", "Suppriment la ceinture", "Réduisent la pression violente de la ceinture sur le thorax", "Bloque le volant"],
+      "bonneReponse": ["Réduisent la pression violente de la ceinture sur le thorax"]
+    },
+    {
+      "question": "Les appuie-tête actifs :",
+      "image": null,
+      "reponse": ["Descendent lors d’un choc arrière", "Restent immobiles", "Se relèvent et s’avancent pour protéger le cou", "Protègent uniquement les jambes"],
+      "bonneReponse": ["Se relèvent et s’avancent pour protéger le cou"]
+    },
+    {
+      "question": "En position de conduite, il faut :",
+      "image": null,
+      "reponse": ["Mettre les pouces à l’intérieur du volant", "Conduire très près du volant", "Ne pas conduire trop près du volant et éviter les mains ou pouces à l’intérieur du volant", "Tenir le volant uniquement d’une main"],
+      "bonneReponse": ["Ne pas conduire trop près du volant et éviter les mains ou pouces à l’intérieur du volant"]
     }
   ],
   "cat2": [
