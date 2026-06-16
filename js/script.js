@@ -55,28 +55,41 @@ function renderQuestion() {
 
 function validate() {
     const q = currentCat[currentIdx];
+    
+    // Empêcher de cliquer plusieurs fois sur Valider
+    if (document.getElementById('btnValid').style.display === 'none') return;
+
     let isCorrect = false;
 
     if (Array.isArray(q.reponse)) {
-        // Logique de validation pour choix multiples
+        // On récupère tous les éléments qui ont la classe 'selected'
         const selected = Array.from(document.querySelectorAll('.option-btn.selected')).map(b => b.innerText);
+        
+        // Comparaison des tableaux triés
         isCorrect = JSON.stringify(selected.sort()) === JSON.stringify(q.bonneReponse.sort());
         
         document.querySelectorAll('.option-btn').forEach(btn => {
-            btn.style.backgroundColor = q.bonneReponse.includes(btn.innerText) ? 'green' : 'red';
+            // Couleur rouge/verte pour toutes les options
+            if (q.bonneReponse.includes(btn.innerText)) {
+                btn.style.backgroundColor = 'green';
+            } else if (btn.classList.contains('selected')) {
+                btn.style.backgroundColor = 'red';
+            }
         });
     } else {
         const val = document.getElementById('simple-input').value;
-        isCorrect = (val === q.reponse);
+        isCorrect = (val.trim() === q.reponse.trim()); // .trim() pour éviter les erreurs d'espaces
         document.getElementById('simple-input').style.backgroundColor = isCorrect ? 'green' : 'red';
     }
 
-    if (isCorrect) score++; // Incrémente le score si c'est juste
+    // Mise à jour des variables globales
+    if (isCorrect) score++;
     questionsAnswered++;
     
-    // Mise à jour de l'affichage du score
+    // Mise à jour de l'affichage
     document.getElementById('score-display').innerText = `Score : ${score} / ${questionsAnswered}`;
     
+    // Bascule des boutons
     document.getElementById('btnValid').style.display = 'none';
     document.getElementById('btnNext').style.display = 'inline-block';
 }
