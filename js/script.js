@@ -1,6 +1,8 @@
 let questions = [];
 let currentIdx = 0;
 let currentCat = [];
+let score = 0; // Ajout du score
+let questionsAnswered = 0; // Compteur pour le total des questions répondues
 
 // Fonction pour mélanger un tableau (Algorithme de Fisher-Yates)
 function shuffle(array) {
@@ -14,6 +16,9 @@ function shuffle(array) {
 async function initGame(catName) {
     const res = await fetch('questions.json');
     const data = await res.json();
+    score = 0; // Reset du score au début
+    questionsAnswered = 0;
+    document.getElementById('score-display').innerText = "Score : 0 / 0";
     
     // 1. Debugging: Check if data and the specific category exist
     console.log("Loaded data:", data);
@@ -50,22 +55,54 @@ function renderQuestion() {
 
 function validate() {
     const q = currentCat[currentIdx];
+    let isCorrect = false;
+
     if (Array.isArray(q.reponse)) {
+        // Logique de validation pour choix multiples
+        const selected = Array.from(document.querySelectorAll('.option-btn.selected')).map(b => b.innerText);
+        isCorrect = JSON.stringify(selected.sort()) === JSON.stringify(q.bonneReponse.sort());
+        
         document.querySelectorAll('.option-btn').forEach(btn => {
             btn.style.backgroundColor = q.bonneReponse.includes(btn.innerText) ? 'green' : 'red';
         });
     } else {
         const val = document.getElementById('simple-input').value;
-        document.getElementById('simple-input').style.backgroundColor = (val === q.reponse) ? 'green' : 'red';
+        isCorrect = (val === q.reponse);
+        document.getElementById('simple-input').style.backgroundColor = isCorrect ? 'green' : 'red';
     }
+
+    if (isCorrect) score++; // Incrémente le score si c'est juste
+    questionsAnswered++;
+    
+    // Mise à jour de l'affichage du score
+    document.getElementById('score-display').innerText = `Score : ${score} / ${questionsAnswered}`;
+    
     document.getElementById('btnValid').style.display = 'none';
     document.getElementById('btnNext').style.display = 'inline-block';
 }
 
+function backToMenu() {
+    // 1. On cache le jeu
+    document.getElementById('game-container').style.display = 'none';
+    
+    // 2. On affiche le menu
+    document.getElementById('menu-cat').style.display = 'block';
+    
+    // 3. Optionnel : Réinitialiser le score si vous voulez repartir à zéro
+    score = 0;
+    questionsAnswered = 0;
+    document.getElementById('score-display').innerText = "Score : 0 / 0";
+}
+
 function nextQuestion() {
     currentIdx++;
-    if (currentIdx < currentCat.length) renderQuestion();
-    else location.reload(); // Fin de catégorie, on recharge
+    if (currentIdx < currentCat.length) {
+        renderQuestion();
+    } else {
+        // Au lieu de recharger la page, on affiche un petit message et on revient au menu
+        alert("Catégorie terminée ! Votre score final est de " + score + "/" + questionsAnswered);
+        backToMenu(); 
+    }
 }
 
 // Fonction pour charger le menu dynamiquement au démarrage
