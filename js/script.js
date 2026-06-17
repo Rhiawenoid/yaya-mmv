@@ -32,7 +32,12 @@ function renderQuestion() {
     content.innerHTML += `<h3>${q.question}</h3>`;
     
     if (Array.isArray(q.reponse)) {
-        q.reponse.forEach(opt => content.innerHTML += `<div class="option-btn" onclick="this.classList.toggle('selected')">${opt}</div>`);
+        // q.reponse est le tableau des choix. 
+        // q.bonneReponse doit être la chaîne de caractère ou le tableau de la bonne réponse
+        // Dans renderQuestion, assurez-vous que cette ligne est bien présente :
+        q.reponse.forEach(opt => {
+            content.innerHTML += `<div class="option-btn" onclick="selectOption(this)" data-value="${opt}">${opt}</div>`;
+        });
     } else {
         content.innerHTML += `<input type="text" id="simple-input">`;
     }
@@ -41,12 +46,32 @@ function renderQuestion() {
     document.getElementById('btnNext').style.display = 'none';
 }
 
+// Nouvelle fonction pour gérer la sélection visuelle
+function selectOption(element) {
+    // Retire la classe 'selected' de tous les autres choix
+    document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+    // Ajoute sur celui cliqué
+    element.classList.add('selected');
+}
+
 function validate() {
     const q = currentCat[currentIdx];
-    if (document.getElementById('btnValid').style.display === 'none') return;
+    const allOptions = document.querySelectorAll('.option-btn');
+    const selectedOptions = document.querySelectorAll('.option-btn.selected');
+    
+    // Convertir les valeurs sélectionnées en tableau
+    const selectedValues = Array.from(selectedOptions).map(el => el.dataset.value);
 
-    // ... (Gardez votre logique actuelle de validation visuelle rouge/vert ici) ...
-    // Note : Supprimez juste les lignes liées au score (score++ et mise à jour texte)
+    allOptions.forEach(btn => {
+        const val = btn.dataset.value;
+        
+        // Est-ce que cette option fait partie des bonnes réponses ?
+        if (q.bonneReponse.includes(val)) {
+            btn.style.backgroundColor = 'green'; // Bonne réponse
+        } else if (btn.classList.contains('selected')) {
+            btn.style.backgroundColor = 'red';   // Mauvaise réponse sélectionnée
+        }
+    });
 
     document.getElementById('btnValid').style.display = 'none';
     document.getElementById('btnNext').style.display = 'inline-block';
