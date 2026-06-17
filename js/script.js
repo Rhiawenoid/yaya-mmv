@@ -24,11 +24,23 @@ async function initGame(catName) {
     renderQuestion();
 }
 
+function renderImages(imageSource) {
+    if (!imageSource) return ""; // Cas null ou undefined
+
+    // Cas si c'est un tableau
+    if (Array.isArray(imageSource)) {
+        return imageSource.map(src => `<img src="${src}" style="max-width:200px; margin:5px;">`).join("");
+    }
+
+    // Cas si c'est une simple chaîne de caractère
+    return `<img src="${imageSource}" style="max-width:200px"><br>`;
+}
+
 function renderQuestion() {
     const q = currentCat[currentIdx];
     const content = document.getElementById('content');
     
-    content.innerHTML = q.image ? `<img src="${q.image}" style="max-width:200px"><br>` : "";
+    content.innerHTML = renderImages(q.image);
     content.innerHTML += `<h3>${q.question}</h3>`;
     
     if (Array.isArray(q.reponse)) {
