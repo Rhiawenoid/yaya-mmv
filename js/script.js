@@ -68,7 +68,6 @@ function backToMenu() {
 }
 
 let allQuestions = {}; // Stocke toutes les données
-let currentCat = [];   // Questions fusionnées des catégories sélectionnées
 
 // Au chargement, on affiche les catégories avec des cases à cocher invisibles
 async function loadCategories() {
