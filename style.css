@@ -34,6 +34,39 @@ button { background: var(--accent); color: white; border: none; padding: 10px 20
     background-color: #e0e0e0;
 }
 
+.cat-checkbox {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    margin: 8px 0;
+    cursor: pointer;
+}
+
+.cat-checkbox input { display: none; } /* Cache la case réelle */
+
+.cat-checkbox span {
+    display: block;
+    padding: 15px;
+    background: #333;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    transition: all 0.2s;
+    color: white;
+}
+
+.cat-checkbox input:checked + span {
+    border-color: var(--accent);
+    background: #444;
+    box-shadow: 0 0 10px rgba(0, 122, 204, 0.3);
+}
+
+#btnStart {
+    background: #28a745; /* Vert pour valider */
+    font-size: 1.2rem;
+    padding: 15px 40px;
+    border-radius: 50px;
+}
+
 /* Media Query pour mobiles */
 @media screen and (max-width: 600px) {
     .container {

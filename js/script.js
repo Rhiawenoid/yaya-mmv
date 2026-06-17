@@ -66,3 +66,43 @@ function backToMenu() {
     document.getElementById('game-container').style.display = 'none';
     document.getElementById('menu-cat').style.display = 'block';
 }
+
+let allQuestions = {}; // Stocke toutes les données
+let currentCat = [];   // Questions fusionnées des catégories sélectionnées
+
+// Au chargement, on affiche les catégories avec des cases à cocher invisibles
+async function loadCategories() {
+    const res = await fetch('questions.json');
+    allQuestions = await res.json();
+    const list = document.getElementById('category-list');
+    
+    Object.keys(allQuestions).forEach(cat => {
+        const label = document.createElement('label');
+        label.className = 'cat-checkbox';
+        label.innerHTML = `
+            <input type="checkbox" value="${cat}" onchange="toggleStartBtn()">
+            <span>${cat}</span>
+        `;
+        list.appendChild(label);
+    });
+}
+
+function toggleStartBtn() {
+    const checked = document.querySelectorAll('input[type="checkbox"]:checked');
+    document.getElementById('btnStart').style.display = checked.length > 0 ? 'inline-block' : 'none';
+}
+
+function startSelectedGame() {
+    const checked = document.querySelectorAll('input[type="checkbox"]:checked');
+    currentCat = [];
+    
+    // On fusionne les questions des catégories cochées
+    checked.forEach(box => {
+        currentCat = currentCat.concat(allQuestions[box.value]);
+    });
+
+    currentIdx = getRandomIdx();
+    document.getElementById('menu-cat').style.display = 'none';
+    document.getElementById('game-container').style.display = 'block';
+    renderQuestion();
+}
