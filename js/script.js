@@ -105,3 +105,5 @@ function startSelectedGame() {
     document.getElementById('game-container').style.display = 'block';
     renderQuestion();
 }
+
+loadCategories()
