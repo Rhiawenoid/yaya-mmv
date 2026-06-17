@@ -46,12 +46,9 @@ function renderQuestion() {
     document.getElementById('btnNext').style.display = 'none';
 }
 
-// Nouvelle fonction pour gérer la sélection visuelle
 function selectOption(element) {
-    // Retire la classe 'selected' de tous les autres choix
-    document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
-    // Ajoute sur celui cliqué
-    element.classList.add('selected');
+    // On bascule simplement la classe 'selected' sans enlever les autres
+    element.classList.toggle('selected');
 }
 
 function validate() {
