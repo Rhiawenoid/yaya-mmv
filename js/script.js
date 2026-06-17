@@ -1,38 +1,24 @@
-let questions = [];
-let currentIdx = 0;
-let currentCat = [];
-let score = 0; // Ajout du score
-let questionsAnswered = 0; // Compteur pour le total des questions répondues
+let currentCat = []; // On garde juste la catégorie active
 
-// Fonction pour mélanger un tableau (Algorithme de Fisher-Yates)
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
+// Fonction pour obtenir un index aléatoire dans le tableau actuel
+function getRandomIdx() {
+    return Math.floor(Math.random() * currentCat.length);
 }
+
+// Global pour stocker l'index de la question en cours
+let currentIdx = 0; 
 
 async function initGame(catName) {
     const res = await fetch('questions.json');
     const data = await res.json();
-    score = 0; // Reset du score au début
-    questionsAnswered = 0;
-    document.getElementById('score-display').innerText = "Score : 0 / 0";
     
-    // 1. Debugging: Check if data and the specific category exist
-    console.log("Loaded data:", data);
-    console.log("Attempting to access:", catName);
-
-    if (!data[catName]) {
-        console.error(`Error: Category "${catName}" not found in JSON.`);
-        return; // Stop execution to prevent the crash
-    }
+    if (!data[catName]) return;
     
-    // 2. Safe assignment
-    currentCat = shuffle([...data[catName]]); 
+    currentCat = data[catName]; // Pas besoin de mélanger le tableau ici
     
-    currentIdx = 0;
+    // On tire une première question au hasard
+    currentIdx = getRandomIdx();
+    
     document.getElementById('menu-cat').style.display = 'none';
     document.getElementById('game-container').style.display = 'block';
     renderQuestion();
@@ -41,6 +27,7 @@ async function initGame(catName) {
 function renderQuestion() {
     const q = currentCat[currentIdx];
     const content = document.getElementById('content');
+    
     content.innerHTML = q.image ? `<img src="${q.image}" style="max-width:200px"><br>` : "";
     content.innerHTML += `<h3>${q.question}</h3>`;
     
@@ -49,93 +36,33 @@ function renderQuestion() {
     } else {
         content.innerHTML += `<input type="text" id="simple-input">`;
     }
+    
     document.getElementById('btnValid').style.display = 'inline-block';
     document.getElementById('btnNext').style.display = 'none';
 }
 
 function validate() {
     const q = currentCat[currentIdx];
-    
-    // Empêcher de cliquer plusieurs fois sur Valider
     if (document.getElementById('btnValid').style.display === 'none') return;
 
-    let isCorrect = false;
+    // ... (Gardez votre logique actuelle de validation visuelle rouge/vert ici) ...
+    // Note : Supprimez juste les lignes liées au score (score++ et mise à jour texte)
 
-    if (Array.isArray(q.reponse)) {
-        // On récupère tous les éléments qui ont la classe 'selected'
-        const selected = Array.from(document.querySelectorAll('.option-btn.selected')).map(b => b.innerText);
-        
-        // Comparaison des tableaux triés
-        isCorrect = JSON.stringify(selected.sort()) === JSON.stringify(q.bonneReponse.sort());
-        
-        document.querySelectorAll('.option-btn').forEach(btn => {
-            // Couleur rouge/verte pour toutes les options
-            if (q.bonneReponse.includes(btn.innerText)) {
-                btn.style.backgroundColor = 'green';
-            } else if (btn.classList.contains('selected')) {
-                btn.style.backgroundColor = 'red';
-            }
-        });
-    } else {
-        const val = document.getElementById('simple-input').value;
-        isCorrect = (val.trim() === q.reponse.trim()); // .trim() pour éviter les erreurs d'espaces
-        document.getElementById('simple-input').style.backgroundColor = isCorrect ? 'green' : 'red';
-    }
-
-    // Mise à jour des variables globales
-    if (isCorrect) score++;
-    questionsAnswered++;
-    
-    // Mise à jour de l'affichage
-    document.getElementById('score-display').innerText = `Score : ${score} / ${questionsAnswered}`;
-    
-    // Bascule des boutons
     document.getElementById('btnValid').style.display = 'none';
     document.getElementById('btnNext').style.display = 'inline-block';
 }
 
-function backToMenu() {
-    // 1. On cache le jeu
-    document.getElementById('game-container').style.display = 'none';
-    
-    // 2. On affiche le menu
-    document.getElementById('menu-cat').style.display = 'block';
-    
-    // 3. Optionnel : Réinitialiser le score si vous voulez repartir à zéro
-    score = 0;
-    questionsAnswered = 0;
-    document.getElementById('score-display').innerText = "Score : 0 / 0";
-}
-
 function nextQuestion() {
-    currentIdx++;
-    if (currentIdx < currentCat.length) {
-        renderQuestion();
-    } else {
-        // Au lieu de recharger la page, on affiche un petit message et on revient au menu
-        alert("Catégorie terminée ! Votre score final est de " + score + "/" + questionsAnswered);
-        backToMenu(); 
-    }
+    let newIdx;
+    do {
+        newIdx = getRandomIdx();
+    } while (newIdx === currentIdx && currentCat.length > 1); // Relance tant que c'est la même
+    
+    currentIdx = newIdx;
+    renderQuestion();
 }
 
-// Fonction pour charger le menu dynamiquement au démarrage
-async function loadMenu() {
-    const res = await fetch('questions.json');
-    const data = await res.json();
-    const container = document.getElementById('category-list');
-
-    Object.keys(data).forEach(cat => {
-        // Nettoyage : remplace '-' par ' ' et met une majuscule au début
-        let label = cat.replace(/-/g, ' '); 
-        label = label.charAt(0).toUpperCase() + label.slice(1);
-
-        const btn = document.createElement('button');
-        btn.innerText = label;
-        btn.className = 'cat-btn'; // Ajout d'une classe pour le style
-        btn.onclick = () => initGame(cat);
-        container.appendChild(btn);
-    });
+function backToMenu() {
+    document.getElementById('game-container').style.display = 'none';
+    document.getElementById('menu-cat').style.display = 'block';
 }
-
-// Appeler cette fonction quand la page est chargée
-window.onload = loadMenu;
