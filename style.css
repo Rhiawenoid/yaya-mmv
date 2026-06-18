@@ -119,3 +119,20 @@ button { background: var(--accent); color: white; border: none; padding: 10px 20
 }
 .question-item h4 { margin: 0 0 5px 0; color: var(--accent); }
 .answer-text { color: #88cc88; font-weight: bold; }
+
+/* Style pour que les questions dans la liste ressemblent au jeu */
+.question-item {
+    margin-bottom: 15px;
+    padding: 15px;
+    background: var(--card);
+    border-radius: 8px;
+    text-align: left;
+}
+
+/* On réutilise .cat-checkbox qui est déjà défini dans votre CSS pour le menu */
+#category-list-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}

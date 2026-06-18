@@ -32,8 +32,13 @@
         </div>
 
         <div id="list-tab" class="tab-content" style="display:none;">
-            <div class="card">
-                <h2>Liste des questions</h2>
+            <div id="list-menu">
+                <h2>Sélectionnez les catégories à afficher :</h2>
+                <div id="category-list-list"></div> <button id="btnShowList" onclick="displaySelectedQuestions()" style="margin-top: 20px;">Afficher les questions</button>
+            </div>
+            
+            <div id="list-results" style="display:none; margin-top: 20px;">
+                <button onclick="backToListMenu()">⬅ Retour à la sélection</button>
                 <div id="all-questions-list"></div>
             </div>
         </div>
