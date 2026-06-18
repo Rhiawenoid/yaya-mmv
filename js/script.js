@@ -140,4 +140,33 @@ function startSelectedGame() {
     renderQuestion();
 }
 
+// Fonction pour basculer entre les onglets
+function showTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    
+    document.getElementById(tabId).style.display = 'block';
+    event.currentTarget.classList.add('active');
+
+    if (tabId === 'list-tab') renderAllQuestions();
+}
+
+// Fonction pour afficher toutes les questions
+function renderAllQuestions() {
+    const listDiv = document.getElementById('all-questions-list');
+    listDiv.innerHTML = "";
+
+    Object.keys(allQuestions).forEach(cat => {
+        listDiv.innerHTML += `<h3>Catégorie : ${cat}</h3>`;
+        allQuestions[cat].forEach(q => {
+            listDiv.innerHTML += `
+                <div class="question-item">
+                    <h4>${q.question}</h4>
+                    <p>Réponse : <span class="answer-text">${q.bonneReponse}</span></p>
+                </div>
+            `;
+        });
+    });
+}
+
 loadCategories()
