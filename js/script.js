@@ -104,20 +104,50 @@ function backToMenu() {
 let allQuestions = {}; // Stocke toutes les données
 
 // Au chargement, on affiche les catégories avec des cases à cocher invisibles
+// Remplacez la fonction loadCategories pour remplir aussi la liste
 async function loadCategories() {
     const res = await fetch('questions.json');
     allQuestions = await res.json();
-    const list = document.getElementById('category-list');
+    
+    // Remplissage du menu de jeu
+    const listGame = document.getElementById('category-list');
+    // Remplissage du menu de la liste
+    const listTab = document.getElementById('category-list-list');
     
     Object.keys(allQuestions).forEach(cat => {
-        const label = document.createElement('label');
-        label.className = 'cat-checkbox';
-        label.innerHTML = `
-            <input type="checkbox" value="${cat}" onchange="toggleStartBtn()">
-            <span>${cat}</span>
-        `;
-        list.appendChild(label);
+        // Pour le jeu
+        listGame.innerHTML += `<label class="cat-checkbox"><input type="checkbox" value="${cat}" onchange="toggleStartBtn()"><span>${cat}</span></label>`;
+        // Pour l'onglet liste (on réutilise la même classe CSS .cat-checkbox)
+        listTab.innerHTML += `<label class="cat-checkbox"><input type="checkbox" value="${cat}"><span>${cat}</span></label>`;
     });
+}
+
+// Nouvelle fonction pour afficher la sélection
+function displaySelectedQuestions() {
+    const checked = document.querySelectorAll('#category-list-list input[type="checkbox"]:checked');
+    const container = document.getElementById('all-questions-list');
+    container.innerHTML = "";
+
+    checked.forEach(box => {
+        const cat = box.value;
+        container.innerHTML += `<h3>${cat}</h3>`;
+        allQuestions[cat].forEach(q => {
+            container.innerHTML += `
+                <div class="card question-item">
+                    <h4>${q.question}</h4>
+                    <p>Réponse : <span class="answer-text">${Array.isArray(q.bonneReponse) ? q.bonneReponse.join(', ') : q.bonneReponse}</span></p>
+                </div>
+            `;
+        });
+    });
+
+    document.getElementById('list-menu').style.display = 'none';
+    document.getElementById('list-results').style.display = 'block';
+}
+
+function backToListMenu() {
+    document.getElementById('list-menu').style.display = 'block';
+    document.getElementById('list-results').style.display = 'none';
 }
 
 function toggleStartBtn() {
