@@ -265,12 +265,25 @@
       "image": null,
       "reponse": [
         "A. Un piquet blanc à anneau rouge",
-        "B. Un piquet blanc avec capuchon rouge ou une balise bleu",
+        "B. Un piquet blanc, un piquet blanc avec capuchon rouge ou une balise bleu",
         "C. Un panneau triangulaire uniquement",
         "D. Une borne kilométrique"
       ],
       "bonneReponse": [
-        "B. Un piquet blanc avec capuchon rouge ou une balise bleu"
+        "B. Un piquet blanc, un piquet blanc avec capuchon rouge ou une balise bleu"
+      ]
+    },
+    {
+      "question": "Pour signaler un virage fréquemment enneigé, on peut trouver :",
+      "image": null,
+      "reponse": [
+        "A. Un piquet blanc à anneau rouge",
+        "B. Un piquet blanc avec capuchon rouge",
+        "C. Un panneau triangulaire uniquement",
+        "D. Une borne kilométrique"
+      ],
+      "bonneReponse": [
+        "B. Un piquet blanc avec capuchon rouge"
       ]
     },
     {
@@ -2123,12 +2136,12 @@
       "image": null,
       "reponse": [
         "A. Une audition parfaite est obligatoire",
-        "B. Il existe aucune restriction spécifique pour les malentendants",
+        "B. Il existe une restriction spécifique pour les malentendants",
         "C. Il n’y a pas de restriction particulière liée à l’audition",
         "D. Les appareils auditifs sont interdits"
       ],
       "bonneReponse": [
-        "B. Il existe aucune restriction spécifique pour les malentendants"
+        "B. Il existe une restriction spécifique pour les malentendants"
       ]
     },
     {
