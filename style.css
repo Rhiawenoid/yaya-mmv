@@ -105,3 +105,17 @@ button { background: var(--accent); color: white; border: none; padding: 10px 20
         height: auto;
     }
 }
+
+.tabs { display: flex; gap: 5px; margin-bottom: 20px; }
+.tab-btn { flex: 1; background: #333; }
+.tab-btn.active { background: var(--accent); }
+.tab-content { display: block; }
+
+/* Style pour la liste */
+.question-item { 
+    text-align: left; 
+    border-bottom: 1px solid #444; 
+    padding: 15px 0; 
+}
+.question-item h4 { margin: 0 0 5px 0; color: var(--accent); }
+.answer-text { color: #88cc88; font-weight: bold; }
