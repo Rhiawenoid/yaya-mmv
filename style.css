@@ -32,7 +32,8 @@ button { background: var(--accent); color: white; border: none; padding: 10px 20
 .option-btn.selected {
     border: 2px solid blue; /* Visualiser la sélection */
     background-color: #e0e0e0;
-    
+    color:black;
+
 }
 
 .cat-checkbox {
