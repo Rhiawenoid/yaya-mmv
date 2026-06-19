@@ -1,38 +1,52 @@
-let currentCat = []; // On garde juste la catégorie active
+let currentCat = [];
+let currentIdx = 0; 
+let allQuestions = {}; 
 
-// Fonction pour obtenir un index aléatoire dans le tableau actuel
+// -------------------------------------------------------------
+// GESTION DE LA SAUVEGARDE LOCALE (LOCALSTORAGE)
+// -------------------------------------------------------------
+
+// Récupérer la liste des questions connues
+function getKnownQuestions() {
+    const stored = localStorage.getItem('allyokou_known_questions');
+    return stored ? JSON.parse(stored) : [];
+}
+
+// Ajouter ou retirer une question des connues
+function toggleKnownQuestion(checkbox) {
+    const questionText = checkbox.getAttribute('data-question');
+    let known = getKnownQuestions();
+    
+    if (checkbox.checked) {
+        if (!known.includes(questionText)) known.push(questionText);
+    } else {
+        known = known.filter(q => q !== questionText);
+    }
+    
+    localStorage.setItem('allyokou_known_questions', JSON.stringify(known));
+    
+    // Effet visuel immédiat
+    const card = checkbox.closest('.question-item');
+    if (checkbox.checked) {
+        card.classList.add('known-card');
+    } else {
+        card.classList.remove('known-card');
+    }
+}
+
+// -------------------------------------------------------------
+// LOGIQUE DE JEU
+// -------------------------------------------------------------
+
 function getRandomIdx() {
     return Math.floor(Math.random() * currentCat.length);
 }
 
-// Global pour stocker l'index de la question en cours
-let currentIdx = 0; 
-
-async function initGame(catName) {
-    const res = await fetch('questions.json');
-    const data = await res.json();
-    
-    if (!data[catName]) return;
-    
-    currentCat = data[catName]; // Pas besoin de mélanger le tableau ici
-    
-    // On tire une première question au hasard
-    currentIdx = getRandomIdx();
-    
-    document.getElementById('menu-cat').style.display = 'none';
-    document.getElementById('game-container').style.display = 'block';
-    renderQuestion();
-}
-
 function renderImages(imageSource) {
-    if (!imageSource) return ""; // Cas null ou undefined
-
-    // Cas si c'est un tableau
+    if (!imageSource) return "";
     if (Array.isArray(imageSource)) {
         return imageSource.map(src => `<img src="${src}" style="max-width:200px; margin:5px;">`).join("");
     }
-
-    // Cas si c'est une simple chaîne de caractère
     return `<img src="${imageSource}" style="max-width:200px"><br>`;
 }
 
@@ -44,9 +58,6 @@ function renderQuestion() {
     content.innerHTML += `<h3>${q.question}</h3>`;
     
     if (Array.isArray(q.reponse)) {
-        // q.reponse est le tableau des choix. 
-        // q.bonneReponse doit être la chaîne de caractère ou le tableau de la bonne réponse
-        // Dans renderQuestion, assurez-vous que cette ligne est bien présente :
         q.reponse.forEach(opt => {
             content.innerHTML += `<div class="option-btn" onclick="selectOption(this)" data-value="${opt}">${opt}</div>`;
         });
@@ -59,7 +70,6 @@ function renderQuestion() {
 }
 
 function selectOption(element) {
-    // On bascule simplement la classe 'selected' sans enlever les autres
     element.classList.toggle('selected');
 }
 
@@ -68,17 +78,12 @@ function validate() {
     const allOptions = document.querySelectorAll('.option-btn');
     const selectedOptions = document.querySelectorAll('.option-btn.selected');
     
-    // Convertir les valeurs sélectionnées en tableau
-    const selectedValues = Array.from(selectedOptions).map(el => el.dataset.value);
-
     allOptions.forEach(btn => {
         const val = btn.dataset.value;
-        
-        // Est-ce que cette option fait partie des bonnes réponses ?
         if (q.bonneReponse.includes(val)) {
-            btn.style.backgroundColor = 'green'; // Bonne réponse
+            btn.style.backgroundColor = 'green'; 
         } else if (btn.classList.contains('selected')) {
-            btn.style.backgroundColor = 'red';   // Mauvaise réponse sélectionnée
+            btn.style.backgroundColor = 'red';   
         }
     });
 
@@ -90,7 +95,7 @@ function nextQuestion() {
     let newIdx;
     do {
         newIdx = getRandomIdx();
-    } while (newIdx === currentIdx && currentCat.length > 1); // Relance tant que c'est la même
+    } while (newIdx === currentIdx && currentCat.length > 1); 
     
     currentIdx = newIdx;
     renderQuestion();
@@ -101,28 +106,46 @@ function backToMenu() {
     document.getElementById('menu-cat').style.display = 'block';
 }
 
-let allQuestions = {}; // Stocke toutes les données
+// -------------------------------------------------------------
+// CHARGEMENT ET LISTES
+// -------------------------------------------------------------
 
-// Au chargement, on affiche les catégories avec des cases à cocher invisibles
-// Remplacez la fonction loadCategories pour remplir aussi la liste
 async function loadCategories() {
     const res = await fetch('questions.json');
     allQuestions = await res.json();
     
-    // Remplissage du menu de jeu
     const listGame = document.getElementById('category-list');
-    // Remplissage du menu de la liste
     const listTab = document.getElementById('category-list-list');
     
     Object.keys(allQuestions).forEach(cat => {
-        // Pour le jeu
         listGame.innerHTML += `<label class="cat-checkbox"><input type="checkbox" value="${cat}" onchange="toggleStartBtn()"><span>${cat}</span></label>`;
-        // Pour l'onglet liste (on réutilise la même classe CSS .cat-checkbox)
         listTab.innerHTML += `<label class="cat-checkbox"><input type="checkbox" value="${cat}"><span>${cat}</span></label>`;
     });
 }
 
-// Nouvelle fonction pour afficher la sélection
+// Fonction générique pour générer le HTML d'une question dans les listes
+function createQuestionHTML(q) {
+    const known = getKnownQuestions();
+    const isKnown = known.includes(q.question);
+    const checkedAttr = isKnown ? 'checked' : '';
+    const knownClass = isKnown ? 'known-card' : '';
+    // On échappe les guillemets pour ne pas casser le HTML
+    const safeQuestionText = q.question.replace(/"/g, '&quot;'); 
+
+    return `
+        <div class="card question-item ${knownClass}">
+            <div class="known-toggle">
+                <label>
+                    <input type="checkbox" data-question="${safeQuestionText}" onchange="toggleKnownQuestion(this)" ${checkedAttr}>
+                    ✅ Je connais déjà cette question
+                </label>
+            </div>
+            ${renderImages(q.image)} <h4>${q.question}</h4>
+            <p>Réponse : <span class="answer-text">${Array.isArray(q.bonneReponse) ? q.bonneReponse.join('<br> ') : q.bonneReponse}</span></p>
+        </div>
+    `;
+}
+
 function displaySelectedQuestions() {
     const checked = document.querySelectorAll('#category-list-list input[type="checkbox"]:checked');
     const container = document.getElementById('all-questions-list');
@@ -132,17 +155,24 @@ function displaySelectedQuestions() {
         const cat = box.value;
         container.innerHTML += `<h3>${cat}</h3>`;
         allQuestions[cat].forEach(q => {
-            container.innerHTML += `
-                <div class="card question-item">
-                    <h4>${q.question}</h4>
-                    <p>Réponse : <span class="answer-text">${Array.isArray(q.bonneReponse) ? q.bonneReponse.join(', ') : q.bonneReponse}</span></p>
-                </div>
-            `;
+            container.innerHTML += createQuestionHTML(q);
         });
     });
 
     document.getElementById('list-menu').style.display = 'none';
     document.getElementById('list-results').style.display = 'block';
+}
+
+function renderAllQuestions() {
+    const listDiv = document.getElementById('all-questions-list');
+    listDiv.innerHTML = "";
+
+    Object.keys(allQuestions).forEach(cat => {
+        listDiv.innerHTML += `<h3>Catégorie : ${cat}</h3>`;
+        allQuestions[cat].forEach(q => {
+            listDiv.innerHTML += createQuestionHTML(q);
+        });
+    });
 }
 
 function backToListMenu() {
@@ -151,18 +181,26 @@ function backToListMenu() {
 }
 
 function toggleStartBtn() {
-    const checked = document.querySelectorAll('input[type="checkbox"]:checked');
+    const checked = document.querySelectorAll('#category-list input[type="checkbox"]:checked');
     document.getElementById('btnStart').style.display = checked.length > 0 ? 'inline-block' : 'none';
 }
 
 function startSelectedGame() {
-    const checked = document.querySelectorAll('input[type="checkbox"]:checked');
+    const checked = document.querySelectorAll('#category-list input[type="checkbox"]:checked');
     currentCat = [];
+    const known = getKnownQuestions();
     
-    // On fusionne les questions des catégories cochées
+    // On fusionne les questions des catégories cochées, en IGNORANT celles qui sont connues
     checked.forEach(box => {
-        currentCat = currentCat.concat(allQuestions[box.value]);
+        const questionsToPlay = allQuestions[box.value].filter(q => !known.includes(q.question));
+        currentCat = currentCat.concat(questionsToPlay);
     });
+
+    // Sécurité si l'utilisateur connaît déjà toutes les questions
+    if (currentCat.length === 0) {
+        alert("Bravo ! Vous avez marqué toutes les questions de ces catégories comme 'déjà connues'. Décochez-en dans la liste pour rejouer.");
+        return;
+    }
 
     currentIdx = getRandomIdx();
     document.getElementById('menu-cat').style.display = 'none';
@@ -170,7 +208,6 @@ function startSelectedGame() {
     renderQuestion();
 }
 
-// Fonction pour basculer entre les onglets
 function showTab(tabId) {
     document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -181,22 +218,4 @@ function showTab(tabId) {
     if (tabId === 'list-tab') renderAllQuestions();
 }
 
-// Fonction pour afficher toutes les questions
-function renderAllQuestions() {
-    const listDiv = document.getElementById('all-questions-list');
-    listDiv.innerHTML = "";
-
-    Object.keys(allQuestions).forEach(cat => {
-        listDiv.innerHTML += `<h3>Catégorie : ${cat}</h3>`;
-        allQuestions[cat].forEach(q => {
-            listDiv.innerHTML += `
-                <div class="question-item">
-                    <h4>${q.question}</h4>
-                    <p>Réponse : <span class="answer-text">${q.bonneReponse}</span></p>
-                </div>
-            `;
-        });
-    });
-}
-
-loadCategories()
+loadCategories();
