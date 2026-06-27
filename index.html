@@ -17,7 +17,7 @@
     <main id="app-container" class="container" style="display:none;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h1 id="app-title">Code Lyoko</h1>
-            <button onclick="backToModeSelection()" style="background: #555; padding: 5px 10px; border-radius: 5px;">Changer de mode</button>
+            <button onclick="backToModeSelection()" style="background: #555; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Changer de mode</button>
         </div>
         
         <div class="tabs">
@@ -28,13 +28,14 @@
         <div id="game-tab" class="tab-content">
             <div id="menu-cat">
                 <h2>Choisissez vos catégories :</h2>
+                <button onclick="toggleSelectAll('category-list')" style="margin-bottom: 15px;">Tout sélectionner / Désélectionner</button>
                 <div id="category-list"></div>
                 <button id="btnStart" onclick="startSelectedGame()" style="margin-top: 20px; display: none;">Lancer la partie</button>
             </div>
             <div class="card" id="game-container" style="display:none;">
-                <button onclick="backToMenu()">⬅ Retour au menu</button>
+                <button onclick="backToMenu()" style="margin-bottom: 15px;">⬅ Retour au menu</button>
                 <div id="content"></div>
-                <div class="controls">
+                <div class="controls" style="margin-top: 20px;">
                     <button id="btnValid" onclick="validate()">Valider</button>
                     <button id="btnNext" onclick="nextQuestion()" style="display:none;">Suivant</button>
                 </div>
@@ -44,15 +45,17 @@
         <div id="list-tab" class="tab-content" style="display:none;">
             <div id="list-menu">
                 <h2>Sélectionnez les catégories à afficher :</h2>
+                <button onclick="toggleSelectAll('category-list-list')" style="margin-bottom: 15px;">Tout sélectionner / Désélectionner</button>
                 <div id="category-list-list"></div> 
                 <button id="btnShowList" onclick="displaySelectedQuestions()" style="margin-top: 20px;">Afficher les questions</button>
             </div>
             
             <div id="list-results" style="display:none; margin-top: 20px;">
-                <button onclick="backToListMenu()">⬅ Retour à la sélection</button>
+                <button onclick="backToListMenu()" style="margin-bottom: 15px;">⬅ Retour à la sélection</button>
                 <div id="all-questions-list"></div>
             </div>
         </div>
     </main>
-    <script src="script.js"></script> </body>
+    <script src="script.js"></script>
+</body>
 </html>

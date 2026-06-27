@@ -264,5 +264,28 @@ function showTab(tabId, event) {
     document.getElementById(tabId).style.display = 'block';
     if(event) event.currentTarget.classList.add('active');
 
-    if (tabId === 'list-tab') renderAllQuestions();
+    // On ne charge plus toutes les questions automatiquement !
+    if (tabId === 'list-tab') {
+        document.getElementById('list-menu').style.display = 'block';
+        document.getElementById('list-results').style.display = 'none';
+        // On vide la liste pour ne pas accumuler les résultats d'anciennes recherches
+        document.getElementById('all-questions-list').innerHTML = "";
+    }
+}
+
+// Fonction pour tout cocher ou décocher facilement
+function toggleSelectAll(containerId) {
+    // On cible toutes les checkboxes du conteneur demandé
+    const checkboxes = document.querySelectorAll(`#${containerId} input[type="checkbox"]`);
+    
+    // On vérifie si elles sont déjà TOUTES cochées
+    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+
+    // On inverse leur état
+    checkboxes.forEach(cb => {
+        cb.checked = !allChecked;
+    });
+
+    // On met à jour l'apparition du bouton "Lancer la partie" au cas où
+    toggleStartBtn();
 }
