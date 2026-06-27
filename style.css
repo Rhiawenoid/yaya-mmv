@@ -173,3 +173,50 @@ button { background: var(--accent); color: white; border: none; padding: 10px 20
 .question-item.known-card:hover {
     opacity: 0.8;
 }
+
+
+/* --- Ajouts pour la sélection de mode et les questions ouvertes --- */
+.mode-selection-container {
+    margin-top: 10vh;
+}
+
+.mode-selection-container h1 {
+    font-size: 2.5rem;
+    color: var(--accent);
+    margin-bottom: 30px;
+}
+
+.mode-btn {
+    display: block;
+    width: 100%;
+    max-width: 350px;
+    margin: 15px auto;
+    background: var(--card);
+    color: white;
+    border: 2px solid var(--accent);
+    padding: 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.mode-btn:hover {
+    background: var(--accent);
+    transform: translateY(-2px);
+}
+
+.answer-box {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(40, 167, 69, 0.2);
+    border-left: 4px solid #28a745;
+    border-radius: 4px;
+    text-align: left;
+    font-size: 1.1rem;
+    line-height: 1.4;
+}
+
+.answer-box strong {
+    color: #28a745;
+}

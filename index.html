@@ -7,12 +7,22 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <main class="container">
-        <h1>Code Lyoko</h1>
+    <div id="mode-selection" class="container mode-selection-container">
+        <h1>Allyokou</h1>
+        <p>Sélectionnez votre mode de révision :</p>
+        <button class="mode-btn" onclick="loadMode('code')">🚦 Code de la Route</button>
+        <button class="mode-btn" onclick="loadMode('conduite')">🚗 Vérifications Permis</button>
+    </div>
+
+    <main id="app-container" class="container" style="display:none;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1 id="app-title">Code Lyoko</h1>
+            <button onclick="backToModeSelection()" style="background: #555; padding: 5px 10px; border-radius: 5px;">Changer de mode</button>
+        </div>
         
         <div class="tabs">
-            <button class="tab-btn active" onclick="showTab('game-tab')">Jeu</button>
-            <button class="tab-btn" onclick="showTab('list-tab')">Toutes les questions</button>
+            <button class="tab-btn active" onclick="showTab('game-tab', event)">Jeu</button>
+            <button class="tab-btn" onclick="showTab('list-tab', event)">Toutes les questions</button>
         </div>
 
         <div id="game-tab" class="tab-content">
@@ -34,7 +44,8 @@
         <div id="list-tab" class="tab-content" style="display:none;">
             <div id="list-menu">
                 <h2>Sélectionnez les catégories à afficher :</h2>
-                <div id="category-list-list"></div> <button id="btnShowList" onclick="displaySelectedQuestions()" style="margin-top: 20px;">Afficher les questions</button>
+                <div id="category-list-list"></div> 
+                <button id="btnShowList" onclick="displaySelectedQuestions()" style="margin-top: 20px;">Afficher les questions</button>
             </div>
             
             <div id="list-results" style="display:none; margin-top: 20px;">
@@ -43,6 +54,5 @@
             </div>
         </div>
     </main>
-    <script src="js/script.js"></script>
-</body>
+    <script src="script.js"></script> </body>
 </html>
